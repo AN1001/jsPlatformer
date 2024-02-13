@@ -1,0 +1,13 @@
+:root, body {
+	background: url("Tiles/tile_0057.png");
+	margin: 0 !important;
+	padding: 0 !important;
+	overflow-y: hidden;
+}
+
+canvas{
+	background: rgb(0,0,0);
+	margin-left: calc(50vw - 500px);
+	padding: 0 !important;
+	image-rendering: pixelated;
+}
