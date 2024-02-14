@@ -172,6 +172,8 @@ function update() {
           player.jumping = false;
       } else if (dir === "t") {
           player.velY *= -1;
+      } else if (dir === "bounce"){
+          player.velX *= -10;
       }
 
   }
@@ -191,6 +193,10 @@ function update() {
 
 function colCheck(shapeA, shapeB) {
   // get the vectors to check against
+  if(shapeB.type=="env"){
+    return null
+  }
+
   var vX = (shapeA.x + (shapeA.width / 2)) - (shapeB.x + (shapeB.width / 2)),
       vY = (shapeA.y + (shapeA.height / 2)) - (shapeB.y + (shapeB.height / 2)),
       // add the half widths and half heights of the objects
@@ -223,6 +229,9 @@ function colCheck(shapeA, shapeB) {
           } else {
               colDir = "r";
               shapeA.x -= oX;
+          }
+          if(shapeB.type == "repel"){
+              colDir = "bounce"
           }
       }
   }
