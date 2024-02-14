@@ -91,6 +91,13 @@ const data = [
         "type": "platform",
     },
     {
+        "x": 300,
+        "y": 450,
+        "width": 60,
+        "height": 20,
+        "type": "repel"
+    },
+    {
         "x": 100,
         "y": 450,
         "width": 60,
@@ -121,8 +128,15 @@ const data = [
         "height": 20,
         "type": "bounce",
         "bouncyness":1.8
+    },
+    {
+        "x": 450,
+        "y": 430,
+        "width": 30,
+        "height": 30,
+        "type": "env",
+        "code":"signR"
     }
 ]
-    
 
 export default data
