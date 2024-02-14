@@ -320,6 +320,10 @@ document.body.addEventListener("keyup", function (e) {
 });
 
 window.addEventListener("load", function () {
+  setTimeout(() => {
+    drawBoxes(boxes, canvas.offscreenCanvas)
+  }, "100");
+
   document.documentElement.style.setProperty("--SCALE-FACTOR", SCALEFACTOR);
   drawBoxes(boxes, canvas.offscreenCanvas)
   update()
@@ -329,10 +333,6 @@ window.addEventListener("load", function () {
 window.addEventListener("resize", function () {
   window.location.href = window.location.href
 });
-
-setTimeout(() => {
-  drawBoxes(boxes, canvas.offscreenCanvas)
-}, "100");
 
 function SEF(){
   ctx.imageSmoothingEnabled = false;
