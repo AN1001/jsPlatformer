@@ -9,7 +9,12 @@
 
 canvas{
 	
-	background: rgb(0,0,0);
+	background: linear-gradient(
+		rgba(0, 0, 0, 0.7), 
+		rgba(0, 0, 0, 0.7)
+	  ),
+	  url("Tiles/tile_0057.png");
+	background-size: 25px;
 	margin-left: calc(50vw - 500px);
 	padding: 0 !important;
 	image-rendering: pixelated;

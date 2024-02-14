@@ -19,6 +19,24 @@ platformMid.src = "Tiles/tile_0090.png"
 const platformRight = new Image()
 platformRight.src = "Tiles/tile_0091.png"
 
+const platformLeftRust = new Image()
+platformLeftRust.src = "Tiles/tile_0101.png"
+
+const platformMidRust = new Image()
+platformMidRust.src = "Tiles/tile_0102.png"
+
+const platformRightRust = new Image()
+platformRightRust.src = "Tiles/tile_0103.png"
+
+const platformLeft2 = new Image()
+platformLeft2.src = "Tiles/tile_0097.png"
+
+const platformMid2 = new Image()
+platformMid2.src = "Tiles/tile_0098.png"
+
+const platformRight2 = new Image()
+platformRight2.src = "Tiles/tile_0099.png"
+
 const wall = new Image()
 wall.src = "Tiles/tile_0107.png"
 
@@ -36,6 +54,9 @@ bounceR.src = "Tiles/tile_0266.png"
 
 const signL = new Image()
 signL.src = "Tiles/tile_0198.png"
+
+const barrel = new Image()
+barrel.src = "Tiles/tile_0329.png"
 
 const repel = new Image()
 repel.src = "Tiles/tile_0249.png"
@@ -61,6 +82,7 @@ var canvas = document.getElementById("canvas"),
 
 canvas.offscreenCanvas = document.createElement("canvas");
 canvas.offscreenCanvas.id = "offscreenCanvas";
+
 
 var levels = []
 
@@ -279,11 +301,36 @@ function drawBoxes(boxes, canvas){
 
       ctx.drawImage(platformRight, boxes[i].x+tw*(num-1), boxes[i].y, tw, boxes[i].height)
 
+    } else if(boxes[i].type == "platformRusted"){
+      let num = Math.floor(boxes[i].width/boxes[i].height)
+      let tw = Math.floor(boxes[i].width/num)
+      ctx.drawImage(platformLeftRust, boxes[i].x, boxes[i].y, tw, boxes[i].height)
+
+      for (var j = 1; j < num-1; j++) {
+        ctx.drawImage(platformMidRust, boxes[i].x+(tw*j), boxes[i].y, tw, boxes[i].height)
+      }
+
+      ctx.drawImage(platformRightRust, boxes[i].x+tw*(num-1), boxes[i].y, tw, boxes[i].height)
+
+    } else if(boxes[i].type == "platform2"){
+      let num = Math.floor(boxes[i].width/boxes[i].height)
+      let tw = Math.floor(boxes[i].width/num)
+      ctx.drawImage(platformLeft2, boxes[i].x, boxes[i].y, tw, boxes[i].height)
+
+      for (var j = 1; j < num-1; j++) {
+        ctx.drawImage(platformMid2, boxes[i].x+(tw*j), boxes[i].y, tw, boxes[i].height)
+      }
+
+      ctx.drawImage(platformRight2, boxes[i].x+tw*(num-1), boxes[i].y, tw, boxes[i].height)
+
     } else if(boxes[i].type == "wall"){
       ctx.drawImage(wall, boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height)
 
     } else if(boxes[i].type == "floor"){
       ctx.drawImage(floor, boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height)
+
+    } else if(boxes[i].type == "barrel"){
+      ctx.drawImage(barrel, boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height)
 
     } else if(boxes[i].type == "bounce"){
       let num = Math.floor(boxes[i].width/boxes[i].height)
