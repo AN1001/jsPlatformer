@@ -1,6 +1,7 @@
 import data from './level.js';
 //===================
 const FRAMERATE = 60;
+const SCALEFACTOR = 1;
 
 (function () {
   var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
@@ -33,6 +34,12 @@ bounceM.src = "Tiles/tile_0265.png"
 const bounceR = new Image()
 bounceR.src = "Tiles/tile_0266.png"
 
+const signL = new Image()
+signL.src = "Tiles/tile_0198.png"
+
+const repel = new Image()
+repel.src = "Tiles/tile_0249.png"
+
 var canvas = document.getElementById("canvas"),
   ctx = canvas.getContext("2d"),
   width = 1000,
@@ -53,6 +60,7 @@ var canvas = document.getElementById("canvas"),
   gravity = 0.3;
 
 canvas.offscreenCanvas = document.createElement("canvas");
+canvas.offscreenCanvas.id = "offscreenCanvas";
 
 var levels = []
 
@@ -158,7 +166,7 @@ function update() {
   ctx.beginPath();
   
   player.grounded = false;
-  ctx.drawImage(canvas.offscreenCanvas, 0, 0)
+  ctx.drawImage(canvas.offscreenCanvas, 0, 0, 1000/SCALEFACTOR, Math.floor(height/SCALEFACTOR))
 
   for (var i = 0; i < boxes.length; i++) {
 
@@ -187,7 +195,7 @@ function update() {
 
   ctx.fill();
   ctx.fillStyle = "red";
-  ctx.fillRect(player.x, player.y, player.width, player.height);
+  ctx.fillRect(Math.floor(player.x/SCALEFACTOR),Math.floor(player.y/SCALEFACTOR), Math.floor(player.width/SCALEFACTOR), Math.floor(player.height/SCALEFACTOR));
 
 }
 
@@ -288,6 +296,13 @@ function drawBoxes(boxes, canvas){
 
       ctx.drawImage(bounceR, boxes[i].x+tw*(num-1), boxes[i].y, tw, boxes[i].height)
 
+    }else if(boxes[i].type == "env"){
+      switch(boxes[i].code){
+        case "signL":
+          ctx.drawImage(signL, boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height)
+      }
+    }else if(boxes[i].type == "repel"){
+      ctx.drawImage(repel, boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height)
     }else {
       ctx.rect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
     }
@@ -305,6 +320,7 @@ document.body.addEventListener("keyup", function (e) {
 });
 
 window.addEventListener("load", function () {
+  document.documentElement.style.setProperty("--SCALE-FACTOR", SCALEFACTOR);
   drawBoxes(boxes, canvas.offscreenCanvas)
   update()
   startAnimating(FRAMERATE);
@@ -314,13 +330,23 @@ window.addEventListener("resize", function () {
   window.location.href = window.location.href
 });
 
+setTimeout(() => {
+  drawBoxes(boxes, canvas.offscreenCanvas)
+}, "100");
+
+function SEF(){
+  ctx.imageSmoothingEnabled = false;
+  ctx.webkitImageSmoothingEnabled = false;
+  canvas.offscreenCanvas.getContext("2d").imageSmoothingEnabled = false;
+  canvas.offscreenCanvas.getContext("2d").webkitImageSmoothingEnabled = false;
+}
 
 var fps, fpsInterval, startTime, now, then, elapsed;
 
 
 function startAnimating(fps) {
+    SEF()
     fpsInterval = 1000 / fps;
-    console.log(fpsInterval)
     then = Date.now();
     startTime = then;
     animate();
@@ -329,7 +355,6 @@ function startAnimating(fps) {
 function animate() {
 
   // request another frame
-
   requestAnimationFrame(animate);
 
   // calc elapsed time since last loop
@@ -346,7 +371,6 @@ function animate() {
       then = now - (elapsed % fpsInterval);
 
       update()
-      console.log("frame executed")
 
   }
 }

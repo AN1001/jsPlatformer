@@ -93,8 +93,8 @@ const data = [
     {
         "x": 300,
         "y": 450,
-        "width": 60,
-        "height": 20,
+        "width": 30,
+        "height": 30,
         "type": "repel"
     },
     {
@@ -135,7 +135,7 @@ const data = [
         "width": 30,
         "height": 30,
         "type": "env",
-        "code":"signR"
+        "code":"signL"
     }
 ]
 
