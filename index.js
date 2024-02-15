@@ -8,7 +8,9 @@ const SCALEFACTOR = 1;
   window.requestAnimationFrame = requestAnimationFrame;
 })();
 
-let curLevel = 0
+let frame = 0
+let curLevel = 0;
+let pdir = "l";
 
 const platformLeft = new Image()
 platformLeft.src = "Tiles/tile_0089.png"
@@ -60,6 +62,13 @@ barrel.src = "Tiles/tile_0329.png"
 
 const repel = new Image()
 repel.src = "Tiles/tile_0249.png"
+
+const playerJump = new Image()
+playerJump.src = "Tiles/playerJump.png"
+
+const playerGround = new Image()
+playerGround.src = "Tiles/playerGround.png"
+let curState = playerGround;
 
 var canvas = document.getElementById("canvas"),
   ctx = canvas.getContext("2d"),
@@ -169,12 +178,14 @@ function update() {
   }
   if (keys[39] || keys[68]) {
       // right arrow or D
+      pdir = "r"
       if (player.velX < player.speed) {
           player.velX++;
       }
   }
   if (keys[37] || keys[65]) {
       // left arrow or A
+      pdir = "l"
       if (player.velX > -player.speed) {
           player.velX--;
       }
@@ -217,8 +228,36 @@ function update() {
 
   ctx.fill();
   ctx.fillStyle = "red";
-  ctx.fillRect(Math.floor(player.x/SCALEFACTOR),Math.floor(player.y/SCALEFACTOR), Math.floor(player.width/SCALEFACTOR), Math.floor(player.height/SCALEFACTOR));
+  
+  if(player.jumping){
+    if(pdir=="l"){
+      ctx.drawImage(playerJump, Math.floor(player.x/SCALEFACTOR),Math.floor(player.y/SCALEFACTOR), Math.floor(player.width/SCALEFACTOR), Math.floor(player.height/SCALEFACTOR))
+    } else {
+      ctx.save(); // Save the current state
+      ctx.scale(-1, 1); // Set scale to flip the image
+      ctx.drawImage(playerJump, -Math.floor(player.x/SCALEFACTOR)-30, Math.floor(player.y/SCALEFACTOR), Math.floor(player.width/SCALEFACTOR), Math.floor(player.height/SCALEFACTOR))
+      ctx.restore(); // Restore the last saved state
+    }
+  }else{
+    
+    if(Math.abs(player.velX)<0.01 || frame>10){
+      curState = playerGround
+      if(frame>20){
+        frame = 0
+      }
+    } else {
+      curState = playerJump
+    }
 
+    if(pdir=="l"){
+      ctx.drawImage(curState, Math.floor(player.x/SCALEFACTOR),Math.floor(player.y/SCALEFACTOR), Math.floor(player.width/SCALEFACTOR), Math.floor(player.height/SCALEFACTOR))
+    } else {
+      ctx.save(); // Save the current state
+      ctx.scale(-1, 1); // Set scale to flip the image
+      ctx.drawImage(curState, -Math.floor(player.x/SCALEFACTOR)-30, Math.floor(player.y/SCALEFACTOR), Math.floor(player.width/SCALEFACTOR), Math.floor(player.height/SCALEFACTOR))
+      ctx.restore(); // Restore the last saved state
+    }
+  }
 }
 
 function colCheck(shapeA, shapeB) {
@@ -399,9 +438,22 @@ function startAnimating(fps) {
     animate();
 }
 
+function flipImage(image, ctx, flipH, flipV) {
+  var scaleH = flipH ? -1 : 1, // Set horizontal scale to -1 if flip horizontal
+      scaleV = flipV ? -1 : 1, // Set verical scale to -1 if flip vertical
+      posX = flipH ? width * -1 : 0, // Set x position to -100% if flip horizontal 
+      posY = flipV ? height * -1 : 0; // Set y position to -100% if flip vertical
+  
+  ctx.save(); // Save the current state
+  ctx.scale(scaleH, scaleV); // Set scale to flip the image
+  ctx.drawImage(img, posX, posY, width, height); // draw the image
+  ctx.restore(); // Restore the last saved state
+};
+
 function animate() {
 
   // request another frame
+  frame+=1
   requestAnimationFrame(animate);
 
   // calc elapsed time since last loop
