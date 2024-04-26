@@ -76,7 +76,7 @@ var canvas = document.getElementById("canvas"),
   height = window.innerHeight,
   player = {
       x: width / 2,
-      y: height - 450,
+      y: height - 40,
       width: 30,
       height: 30,
       speed: 3,
